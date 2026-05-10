@@ -11,8 +11,11 @@ CREATE TABLE USUARIOS (
 );
 
 -- Base com 100 registros para apresentacao da APS.
+INSERT INTO USUARIOS (ID, NOME, SENHA1, SENHA2, EMAIL)
+VALUES (1, 'Guikkio', 'APStime', 'APShome', 'guikkio@aps.com');
+
 WITH RECURSIVE sequenciaD(id) AS (
-    SELECT 1
+    SELECT 2
     UNION ALL
     SELECT id + 1
     FROM sequenciaD

@@ -182,10 +182,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const rows = Math.pow(2, vars);
         const operatorSymbols = {
-            AND: "∧",
-            OR: "∨",
-            XOR: "⊕",
-            NOT: "¬"
+            AND: '<i class="bi bi-plus-circle" aria-label="AND"></i>',
+            OR: '<i class="bi bi-diagram-3" aria-label="OR"></i>',
+            XOR: '<i class="bi bi-shuffle" aria-label="XOR"></i>',
+            NOT: '<i class="bi bi-slash-circle" aria-label="NOT"></i>'
         };
         const opSymbol = operatorSymbols[op] || op;
         const expression = op === "NOT"
