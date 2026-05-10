@@ -179,12 +179,24 @@ document.addEventListener("DOMContentLoaded", () => {
         for (let i = 0; i < vars; i++) {
             headers.push(String.fromCharCode(65 + i));
         }
-        headers.push("Resultado");
-
-        let header = "<tr>" + headers.map((title) => `<th>${title}</th>`).join("") + "</tr>";
-        table.innerHTML += header;
 
         const rows = Math.pow(2, vars);
+        const operatorSymbols = {
+            AND: "∧",
+            OR: "∨",
+            XOR: "⊕",
+            NOT: "¬"
+        };
+        const opSymbol = operatorSymbols[op] || op;
+        const expression = op === "NOT"
+            ? `¬${headers[0]}`
+            : headers.join(` ${opSymbol} `);
+
+        const outputHeader = `Resultado (${expression})`;
+
+        headers.push(outputHeader);
+        let header = "<tr>" + headers.map((title) => `<th>${title}</th>`).join("") + "</tr>";
+        table.innerHTML += header;
 
         for (let i = 0; i < rows; i++) {
             let values = [];
