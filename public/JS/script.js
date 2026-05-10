@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    const canvas = document.getElementById("bg");
+    const canvas = document.getElementById("particles");
     const ctx = canvas.getContext("2d");
 
     canvas.width = window.innerWidth;
@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     animate();
 
-    function login() {
+    window.login = function login() {
         const username = document.getElementById("username").value.trim();
         const password = document.getElementById("password").value.trim();
 
@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (progress >= 100) {
                 clearInterval(interval);
 
-                fetch('db/index.php', {
+                fetch('index.php?route=login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                     body: new URLSearchParams({ username, password })
@@ -81,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
         }, 150);
-    }
+    };
 
     function transitionToApp() {
         document.getElementById("loginContainer").style.opacity = 0;
@@ -96,7 +96,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 600);
     }
 
-    function generateTable() {
+    window.generateTable = function generateTable() {
         const vars = parseInt(document.getElementById("variables").value);
         const op = document.getElementById("operator").value;
 
@@ -144,5 +144,5 @@ document.addEventListener("DOMContentLoaded", () => {
                 `</tr>`;
             table.innerHTML += row;
         }
-    }
+    };
 });
