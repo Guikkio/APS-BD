@@ -144,25 +144,33 @@
                 </div>
 
                 <div class="records-filters collapsed" id="recordsFilters">
-                    <div class="filter-group">
-                        <label for="filterStartDate">Data início</label>
-                        <input type="date" id="filterStartDate" min="2015-01-01" max="2026-12-31">
+                    <div class="filter-tabs">
+                        <button type="button" class="filter-tab active" data-filter-tab="year" onclick="switchFilterTab('year')">Ano</button>
+                        <button type="button" class="filter-tab" data-filter-tab="ia" onclick="switchFilterTab('ia')">IA</button>
+                        <button type="button" class="filter-tab" data-filter-tab="platform" onclick="switchFilterTab('platform')">Plataforma</button>
                     </div>
-                    <div class="filter-group">
-                        <label for="filterEndDate">Data fim</label>
-                        <input type="date" id="filterEndDate" min="2015-01-01" max="2026-12-31">
+
+                    <div class="filter-tab-content active" id="filterTabYear">
+                        <div class="filter-options-grid" id="filterYearContainer"></div>
                     </div>
-                    <div class="filter-group">
-                        <label for="filterIA">IA</label>
-                        <select id="filterIA" multiple size="2">
-                            <option value="SIM" selected>SIM</option>
-                            <option value="NAO" selected>NÃO</option>
-                        </select>
+
+                    <div class="filter-tab-content" id="filterTabIA">
+                        <div class="ia-toggle-group">
+                            <button type="button" class="ia-toggle active" data-ia="SIM" onclick="toggleIACheckbox('SIM')">SIM</button>
+                            <button type="button" class="ia-toggle active" data-ia="NAO" onclick="toggleIACheckbox('NAO')">NÃO</button>
+                        </div>
                     </div>
-                    <div class="filter-group">
-                        <label for="filterPlatform">Plataforma</label>
-                        <select id="filterPlatform" multiple size="5"></select>
+
+                    <div class="filter-tab-content" id="filterTabPlatform">
+                        <div class="platform-picker" onclick="togglePlatformOptions()">
+                            <span id="platformPickerLabel">Selecionar plataformas</span>
+                            <span class="platform-chevron">▾</span>
+                        </div>
+                        <div class="platform-options collapsed" id="platformOptions">
+                            <div id="platformOptionsContainer"></div>
+                        </div>
                     </div>
+
                     <div class="filter-actions">
                         <button type="button" onclick="resetRecordFilters()">Limpar filtros</button>
                     </div>

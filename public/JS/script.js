@@ -237,16 +237,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 100, data: '2026-02-05', titulo: 'Video falso criado por IA viraliza nas eleicoes', ia: 'SIM', plataforma: 'TikTok' },
     ];
 
-    const filterStartDate = document.getElementById('filterStartDate');
-    const filterEndDate = document.getElementById('filterEndDate');
-    const filterIA = document.getElementById('filterIA');
-    const filterPlatform = document.getElementById('filterPlatform');
     const recordsFilters = document.getElementById('recordsFilters');
     const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
-
-    function getSelectedOptions(select) {
-        return Array.from(select.selectedOptions).map(option => option.value);
-    }
+    const filterYearContainer = document.getElementById('filterYearContainer');
+    const platformOptionsContainer = document.getElementById('platformOptionsContainer');
+    const platformOptions = document.getElementById('platformOptions');
+    const platformPickerLabel = document.getElementById('platformPickerLabel');
 
     window.toggleRecordFilters = function toggleRecordFilters() {
         const isOpen = recordsFilters.classList.toggle('open');
@@ -256,27 +252,87 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function populatePlatformFilter() {
         const platforms = [...new Set(registros.map(record => record.plataforma))].sort();
+        platformOptionsContainer.innerHTML = '';
+
         platforms.forEach(platform => {
-            const option = document.createElement('option');
-            option.value = platform;
-            option.textContent = platform;
-            option.selected = true;
-            filterPlatform.appendChild(option);
+            const label = document.createElement('label');
+            label.className = 'checkbox-pill';
+            label.innerHTML = `
+                <input type="checkbox" class="platform-checkbox" value="${platform}" checked>
+                ${platform}
+            `;
+            platformOptionsContainer.appendChild(label);
+        });
+
+        document.querySelectorAll('.platform-checkbox').forEach(input => {
+            input.addEventListener('change', filterRecords);
         });
     }
 
+    function populateYearFilter() {
+        filterYearContainer.innerHTML = '';
+        for (let year = 2015; year <= 2026; year += 1) {
+            const label = document.createElement('label');
+            label.className = 'checkbox-pill';
+            label.innerHTML = `
+                <input type="checkbox" class="year-checkbox" value="${year}" checked>
+                ${year}
+            `;
+            filterYearContainer.appendChild(label);
+        }
+
+        document.querySelectorAll('.year-checkbox').forEach(input => {
+            input.addEventListener('change', filterRecords);
+        });
+    }
+
+    window.switchFilterTab = function switchFilterTab(tabName) {
+        const tabs = document.querySelectorAll('.filter-tab');
+        const tabContents = document.querySelectorAll('.filter-tab-content');
+        const tabIdMap = {
+            year: 'filterTabYear',
+            ia: 'filterTabIA',
+            platform: 'filterTabPlatform'
+        };
+
+        tabs.forEach(tab => tab.classList.toggle('active', tab.dataset.filterTab === tabName));
+        tabContents.forEach(content => content.classList.toggle('active', content.id === tabIdMap[tabName]));
+    };
+
+    window.toggleIACheckbox = function toggleIACheckbox(iaValue) {
+        const button = document.querySelector(`.ia-toggle[data-ia="${iaValue}"]`);
+        if (!button) return;
+        button.classList.toggle('active');
+        filterRecords();
+    };
+
+    window.togglePlatformOptions = function togglePlatformOptions() {
+        platformOptions.classList.toggle('collapsed');
+    };
+
+    function getSelectedYears() {
+        return Array.from(document.querySelectorAll('.year-checkbox:checked')).map(input => input.value);
+    }
+
+    function getSelectedIAs() {
+        return Array.from(document.querySelectorAll('.ia-toggle.active')).map(button => button.dataset.ia);
+    }
+
+    function getSelectedPlatforms() {
+        return Array.from(document.querySelectorAll('.platform-checkbox:checked')).map(input => input.value);
+    }
+
     function filterRecords() {
-        const start = filterStartDate.value;
-        const end = filterEndDate.value;
-        const selectedIA = getSelectedOptions(filterIA);
-        const selectedPlatforms = getSelectedOptions(filterPlatform);
+        const selectedYears = getSelectedYears();
+        const selectedIAs = getSelectedIAs();
+        const selectedPlatforms = getSelectedPlatforms();
 
         const filtered = registros.filter(record => {
-            if (start && record.data < start) return false;
-            if (end && record.data > end) return false;
-            if (selectedIA.length && !selectedIA.includes(record.ia)) return false;
-            if (selectedPlatforms.length && !selectedPlatforms.includes(record.plataforma)) return false;
-            return true;
+            const recordYear = record.data.slice(0, 4);
+            const matchesYear = selectedYears.length > 0 && selectedYears.includes(recordYear);
+            const matchesIA = selectedIAs.length > 0 && selectedIAs.includes(record.ia);
+            const matchesPlatform = selectedPlatforms.length > 0 && selectedPlatforms.includes(record.plataforma);
+            return matchesYear && matchesIA && matchesPlatform;
         });
 
         renderRecords(filtered);
@@ -308,22 +364,16 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function resetRecordFilters() {
-        filterStartDate.value = '';
-        filterEndDate.value = '';
-        Array.from(filterIA.options).forEach(option => option.selected = true);
-        Array.from(filterPlatform.options).forEach(option => option.selected = true);
-        filterIA.dispatchEvent(new Event('change'));
-        filterPlatform.dispatchEvent(new Event('change'));
+        document.querySelectorAll('.year-checkbox').forEach(input => { input.checked = true; });
+        document.querySelectorAll('.ia-toggle').forEach(button => { button.classList.add('active'); });
+        document.querySelectorAll('.platform-checkbox').forEach(input => { input.checked = true; });
+        platformOptions.classList.add('collapsed');
         filterRecords();
     }
 
     populatePlatformFilter();
-    filterStartDate.addEventListener('change', filterRecords);
-    filterEndDate.addEventListener('change', filterRecords);
-    filterIA.addEventListener('change', filterRecords);
-    filterPlatform.addEventListener('change', filterRecords);
-
-    renderRecords();
+    populateYearFilter();
+    filterRecords();
 
     window.switchTab = function switchTab(tab) {
         const dashboardTab = document.getElementById('dashboardTab');
