@@ -376,14 +376,12 @@ document.addEventListener("DOMContentLoaded", () => {
     filterRecords();
 
     window.switchTab = function switchTab(tab) {
-        const dashboardTab = document.getElementById('dashboardTab');
-        const latestTab = document.getElementById('latestTab');
-        const recordsTab = document.getElementById('recordsTab');
+        const tabContents = document.querySelectorAll('.tab-content');
         const tabButtons = document.querySelectorAll('.tab-button');
 
-        dashboardTab.classList.toggle('active', tab === 'dashboard');
-        latestTab.classList.toggle('active', tab === 'latest');
-        recordsTab.classList.toggle('active', tab === 'records');
+        tabContents.forEach(content => {
+            content.classList.toggle('active', content.id === `${tab}Tab`);
+        });
 
         tabButtons.forEach(button => {
             button.classList.toggle('active', button.dataset.tab === tab);

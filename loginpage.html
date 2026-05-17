@@ -51,6 +51,7 @@
         <div class="tabs">
             <button class="tab-button active" data-tab="dashboard" onclick="switchTab('dashboard')">Painel Principal</button>
             <button class="tab-button" data-tab="latest" onclick="switchTab('latest')">Últimas Fake News</button>
+            <button class="tab-button" data-tab="recommended" onclick="switchTab('recommended')">Sites recomendados para verificação de Fake News</button>
             <button class="tab-button" data-tab="records" onclick="switchTab('records')">Registros do Banco</button>
         </div>
 
@@ -133,6 +134,20 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div id="recommendedTab" class="tab-content">
+            <div class="table-container">
+                <h2>Sites recomendados para verificação de Fake News</h2>
+                <ul class="recommended-sites">
+                    <li><a href="https://apnews.com" target="_blank" rel="noopener noreferrer">apnews.com</a></li>
+                    <li><a href="https://snopes.com" target="_blank" rel="noopener noreferrer">snopes.com</a></li>
+                    <li><a href="https://reuters.com" target="_blank" rel="noopener noreferrer">reuters.com</a></li>
+                    <li><a href="https://aosfatos.org" target="_blank" rel="noopener noreferrer">aosfatos.org</a></li>
+                    <li><a href="https://boatos.org" target="_blank" rel="noopener noreferrer">boatos.org</a></li>
+                    <li><a href="https://g1.globo.com" target="_blank" rel="noopener noreferrer">g1.globo.com</a></li>
+                </ul>
             </div>
         </div>
 
